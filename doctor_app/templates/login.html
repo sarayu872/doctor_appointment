@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Login</h1>
+        </header>
+        <section class="form-section">
+            <form method="POST" novalidate>
+                <label for="role">Who are you?</label>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>-- Select Role --</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="admin">Admin</option>
+                    <option value="patient">Patient</option>
+                </select>
+                <label for="password">Password (optional for Patient):</label>
+                <input type="password" id="password" name="password">
+                <button type="submit">Login</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>
