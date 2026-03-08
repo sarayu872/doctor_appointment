@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Appointment System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Doctor Appointment System</h1>
+        </header>
+
+        <!-- Patient Booking Form -->
+        {% if role == 'patient' %}
+        <section class="form-section">
+            <h2>Book Appointment</h2>
+            <form method="POST" action="{{ url_for('patient_dashboard') }}">
+                <label>Patient Name:</label>
+                <input type="text" name="patientName" value="{{ patient_name }}" required>
+                <label>Doctor:</label>
+                <select name="doctor" required>
+                    <option value="">-- Select Doctor --</option>
+                    {% for doc in doctors %}
+                    <option value="{{ doc.name }}">{{ doc.name }} ({{ doc.specialization }})</option>
+                    {% endfor %}
+                </select>
+                <label>Date:</label>
+                <input type="date" name="date" required>
+                <label>Time:</label>
+                <input type="time" name="time" required>
+                <label>Problem:</label>
+                <input type="text" name="problem" required>
+                <label>Symptoms:</label>
+                <input type="text" name="symptoms" required>
+                <button type="submit">Book Now</button>
+            </form>
+        </section>
+        {% endif %}
+
+        <!-- Appointments List -->
+        <section class="list-section">
+            <h2>
+                {% if role == 'doctor' %}Your Appointments{% endif %}
+                {% if role == 'admin' %}All Appointments{% endif %}
+                {% if role == 'patient' %}All Appointments{% endif %}
+            </h2>
+            <ul id="appointmentList">
+                {% for appt in appointments %}
+                <li>
+                    <span>
+                        {{ appt[1] }} with {{ appt[2] }} on {{ appt[3] }} at {{ appt[4] }}
+                        (Problem: {{ appt[5] }}, Symptoms: {{ appt[6] }})
+                    </span>
+                    {% if role == 'admin' %}
+                        <a href="{{ url_for('delete', id=appt[0]) }}" class="cancel-btn">Cancel</a>
+                    {% endif %}
+                    {% if role == 'patient' and appt[1] == patient_name %}
+                        <a href="{{ url_for('cancel_appointment', id=appt[0]) }}" class="cancel-btn">Cancel</a>
+                    {% endif %}
+                </li>
+                {% else %}
+                <li>No appointments booked.</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Logout Button - Bottom Center -->
+        <div class="logout-container">
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
